@@ -14,9 +14,10 @@ export default class CreateSurvey1600348252058 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'person_name',
@@ -30,7 +31,7 @@ export default class CreateSurvey1600348252058 implements MigrationInterface {
           },
           {
             name: 'user_id',
-            type: 'varchar',
+            type: 'uuid',
           },
           {
             name: 'created_at',
@@ -46,14 +47,14 @@ export default class CreateSurvey1600348252058 implements MigrationInterface {
       }),
     );
 
-    await queryRunner.createCheckConstraint(
-      'surveys',
-      new TableCheck({
-        name: 'CK_Surveys_Pick',
-        columnNames: ['pick'],
-        expression: "'pick' = 'M' OR 'pick' = 'F'",
-      }),
-    );
+    // await queryRunner.createCheckConstraint(
+    //   'surveys',
+    //   new TableCheck({
+    //     name: 'CK_Surveys_Pick',
+    //     columnNames: ['pick'],
+    //     expression: "'pick' = '' OR 'pick' = 'M' OR 'pick' = 'F'",
+    //   }),
+    // );
 
     await queryRunner.createForeignKey(
       'surveys',
@@ -71,7 +72,7 @@ export default class CreateSurvey1600348252058 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('surveys', 'FK_Survey_User');
 
-    await queryRunner.dropCheckConstraint('surveys', 'CK_Surveys_Pick');
+    // await queryRunner.dropCheckConstraint('surveys', 'CK_Surveys_Pick');
 
     await queryRunner.dropTable('surveys');
   }
