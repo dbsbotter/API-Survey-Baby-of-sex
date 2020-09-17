@@ -51,7 +51,7 @@ export default class CreateSurvey1600348252058 implements MigrationInterface {
       new TableCheck({
         name: 'CK_Surveys_Pick',
         columnNames: ['pick'],
-        expression: 'pick = "M" OR pick = "F"',
+        expression: "'pick' = 'M' OR 'pick' = 'F'",
       }),
     );
 
