@@ -31,6 +31,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(3333, () => {
-  console.log('Up in 3333');
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Up server on ${process.env.PORT || 3000}`);
 });
