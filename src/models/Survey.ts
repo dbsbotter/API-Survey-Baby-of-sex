@@ -21,6 +21,9 @@ class Survey {
   pick: string;
 
   @Column()
+  url_bitly: string;
+
+  @Column()
   user_id: string;
 
   @ManyToOne(() => User)

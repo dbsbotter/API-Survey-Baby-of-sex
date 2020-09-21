@@ -1,4 +1,6 @@
 import { getCustomRepository } from 'typeorm';
+import { BitlyClient } from 'bitly';
+import bitlyConfig from '../config/bitly';
 
 import Survey from '../models/Survey';
 import surveyRepository from '../repositories/SurveyRepository';
@@ -16,6 +18,16 @@ class CreateSurveyService {
       user_id,
       person_name,
     });
+
+    await surveysRepository.save(survey);
+
+    const bitly = new BitlyClient(bitlyConfig.token, {});
+
+    const url = `${process.env.APP_URL}/pick/${survey.id}`;
+
+    const responseLink = await bitly.shorten(url);
+
+    survey.url_bitly = responseLink.link;
 
     await surveysRepository.save(survey);
 

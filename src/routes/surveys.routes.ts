@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 import asyncHandler from 'express-async-handler';
+import { validate } from 'uuid';
 
 import surveyRepository from '../repositories/SurveyRepository';
 import CreateSurveyService from '../services/CreateSurveyService';
@@ -27,15 +28,23 @@ surveyRoutes.get(
   asyncHandler(async (request, response) => {
     const { id } = request.params;
 
+    if (!validate(id)) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Survey id invalid',
+      });
+    }
+
     const surveysRepository = getCustomRepository(surveyRepository);
 
     const surveys = await surveysRepository.findOne(id);
 
-    if (!surveys)
+    if (!surveys) {
       return response.status(404).json({
         status: 'error',
         message: 'Survey not found',
       });
+    }
 
     return response.json(surveys);
   }),
