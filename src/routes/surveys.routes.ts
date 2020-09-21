@@ -12,10 +12,30 @@ const surveyRoutes = Router();
 
 surveyRoutes.get(
   '/',
+  ensureAuth,
   asyncHandler(async (request, response) => {
     const surveysRepository = getCustomRepository(surveyRepository);
 
     const surveys = await surveysRepository.find();
+
+    return response.json(surveys);
+  }),
+);
+
+surveyRoutes.get(
+  '/:id',
+  asyncHandler(async (request, response) => {
+    const { id } = request.params;
+
+    const surveysRepository = getCustomRepository(surveyRepository);
+
+    const surveys = await surveysRepository.findOne(id);
+
+    if (!surveys)
+      return response.status(404).json({
+        status: 'error',
+        message: 'Survey not found',
+      });
 
     return response.json(surveys);
   }),
