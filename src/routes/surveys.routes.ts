@@ -19,7 +19,17 @@ surveyRoutes.get(
 
     const surveys = await surveysRepository.find();
 
-    return response.json(surveys);
+    const resultBoy = surveys.filter(x => x.pick === 'M').length;
+    const resultGirl = surveys.filter(x => x.pick === 'F').length;
+    const total = resultBoy + resultGirl;
+
+    return response.json({
+      surveys,
+      result: {
+        boy: (resultBoy / total) * 100,
+        girl: (resultGirl / total) * 100,
+      },
+    });
   }),
 );
 
